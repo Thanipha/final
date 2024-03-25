@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
+
     public function store(Request $request)
     {
 
@@ -16,7 +17,6 @@ class ItemController extends Controller
         DB::table('items')->insert([
             'name' => $request->name,
             'description' => $request->description,
-            
             'created_at' => Carbon::now()
 
         ]);
@@ -44,5 +44,19 @@ class ItemController extends Controller
 
     $item->update($validatedData);
     return redirect()->route('items.index')->with('success', 'Item updated successfully!');
+}
+public function delete($id)
+{
+    $item = Item::findOrFail($id);
+    $item->delete();
+
+    return redirect()->route('items.index')->with('success', 'Item deleted successfully!');
+}
+public function clearItems()
+{
+
+    DB::table('items')->truncate();
+
+    return redirect()->route('items.index')->with('success', 'All items deleted successfully!');
 }
 }
